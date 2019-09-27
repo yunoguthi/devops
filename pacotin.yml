@@ -1,0 +1,19 @@
+- name: trabalhando com pacotes
+  become: yes
+  hosts: all
+  tasks:
+  - lineinfile:
+      path: /etc/hosts
+      line: '{{item}}'
+    loop:
+    - '192.168.33.10 devops.example.com'
+    - '192.168.33.20 docker.example.com'
+    - '192.168.33.30 automation.example.com'
+  - package:
+      state: present
+      name: ['vim', 'curl', 'telnet', 'htop', 'sl', 'cowsay']
+  - get_url: 
+      url: http://hectorvido.dev/infra-agil.html
+      dest: /var/www/html/index.html
+      force: yes
+    when: ansible_hostname == 'docker'

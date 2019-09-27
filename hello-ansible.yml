@@ -1,0 +1,28 @@
+---
+- name: ola ansible
+  vars:
+    host: all
+  hosts: "{{host}}"
+  become: yes
+  tasks: 
+  - name: verificando memoria
+    command: free -h
+    register: memoria
+  - name: verificando o disco
+    command: df -h
+    register: disco
+  - name: instalando epel no centos
+    package:
+      name: epel-release
+      state: present
+    when: ansible_distribution=='CentOS'
+  - name: instalando htop
+    package: 
+     name: htop
+     state: present
+  - name: status da maquina
+    debug: 
+      msg: 
+      - "memoria: {{memoria.stdout_lines[1]}}"
+      - "disco:{{disco.stdout_lines[1]}}"
+...

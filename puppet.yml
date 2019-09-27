@@ -1,0 +1,22 @@
+- name: Provisionando o Puppet
+  hosts: all
+  become: yes
+  tasks:
+  - name: CentOS
+    block:
+    - yum:
+        name: https://yum.puppet.com/puppet6-release-el-7.noarch.rpm
+        state: present
+    - package:
+        name: puppetserver
+        state: present
+    when: ansible_distribution|lower == 'centos'
+  - name: Debian
+    block:
+    - apt:
+        deb: https://apt.puppetlabs.com/puppet6-release-xenial.deb
+    - apt:
+        name: puppet
+        state: present
+        update_cache: yes
+    when: ansible_distribution|lower == 'debian'
